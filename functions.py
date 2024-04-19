@@ -22,7 +22,7 @@ def create_account():
 
 def log_in():
     e = input("Enter your email: ")
-    #turns email from user into tuple so we can find it through a query
+    #turns email from user into a list so we can find it through a query
     email = [e]
 
     query = ("SELECT password FROM user WHERE email = %s")
