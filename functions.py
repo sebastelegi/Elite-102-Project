@@ -1,16 +1,16 @@
 import mysql.connector
 
 connection = mysql.connector.connect(user = "root", database = "esquivel_bank", password = "Sebas3107*")
-cursor = connection.cursor()
+cursor = connection.cursor(buffered= True)
 
-def create_account():
+def create_account(first_name,last_name,birth_date,address,email,password):
     #Prompts user to enter account details and then adds data to the database
-    first_name = input("Enter your first name: ")
-    last_name = input("Enter your last name: ")
-    birth_date = input("Enter your birthdate(month/day/year): ")
-    address = input("Enter your current address: ")
-    email = input("Enter your email: ")
-    password = input("Enter your account password: ")
+    #first_name = input("Enter your first name: ")
+    #last_name = input("Enter your last name: ")
+    #birth_date = input("Enter your birthdate(month/day/year): ")
+    #address = input("Enter your current address: ")
+    #email = input("Enter your email: ")
+    #password = input("Enter your account password: ")
     balance = 0 
 
     addData = ("INSERT INTO user(firstname, lastname, birthdate, address, email, password, balance) VALUES( %s, %s, %s, %s,%s,%s,%s)")
@@ -21,26 +21,31 @@ def create_account():
 
     print("Your account has been created.")
 
-def log_in():
+def log_in(e,password):
 #This function prompts user to input an email in order to find a password from that email with a query
 # Then we validate the password with a while loop
-    e = input("Enter your email: ")
+    
     #turns email from user into a list so we can find it through a query
     email = [e]
 
     query = ("SELECT password FROM user WHERE email = %s")
     
-    password = input("Enter your password: ")
+    #password = input("Enter your password: ")
+    print(email)
 
     cursor.execute(query , email)
     check = cursor.fetchone()
-    #Until password isn't equal to the password in the query, you cannot go on.
-    
+    #if password isn't equal to the password in the query, return False.
+    print(password)
+    print(check[0])
 
-    while password != check[0]:
-        password = input("Wrong password, try again: ")
+    if password == check[0]:
+        return True
     
-    print("You have logged in successfully!")
+    else:
+        return False
+
+def get_id(email):
 # Getting id will help identify the account in all the other functions:
     get_id = ("SELECT id FROM user WHERE email = %s")
     cursor.execute(get_id, email)
@@ -58,27 +63,27 @@ def check_balance(id):
     return balance[0]
 
 
-def make_deposit(id):
+def make_deposit(id,balance):
 #adds a specified amount to balance
-    balance = int(input("How much money would you like to deposit?: $"))
+    #balance = int(input("How much money would you like to deposit?: $"))
     query = ("UPDATE user SET balance = balance + %s WHERE id = %s")
     value = (balance , id[0])
 
     cursor.execute(query, value)
     connection.commit()
 
-def make_withdrawal(id):
+def make_withdrawal(id, amount):
 #removes a specified amount from balance, unless the difference is less than 0
     balance = check_balance(id)
-    amount = int(input("How much money would you like to withdraw?: $"))
     if (balance - amount) >= 0:
         query = ("UPDATE user SET balance = balance - %s WHERE id = %s")
         value = (amount , id[0])
 
         cursor.execute(query, value)
         connection.commit()
+        return True
     else:
-        print("Insufficient funds, we cannot make withdrawal. Your current balance is " + str(balance))
+        return False
 
 def delete_acc(id):
     #Deletes the user's account using the id
