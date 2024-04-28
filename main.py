@@ -1,7 +1,7 @@
 
 import functions as f 
 from tkinter import *
-import time
+
 
 
 #f.create_account()
