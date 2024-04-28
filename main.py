@@ -72,25 +72,32 @@ def login_entry():
         e = [email.get()]
         global id
         id = f.get_id(e)
-        
+        #Options appear after this line
+        check_balance_button.place(x = 400, y = 100)
+        make_deposit_button.place(x = 400, y = 200 )
+        deposit.place(x = 600, y = 230)
+        make_withdrawal_button.place(x = 400, y = 300 )
+        withdrawal.place(x = 600, y = 330)
+        update_button.place(x = 400, y = 400)
+        update.place(x = 600, y = 430)
+        update2.place(x = 950, y = 430)
+        delete_button.place(x = 400, y = 500 )
 
     elif log == False:
         log_label = Label(root, text= "Wrong email or password, try again")
         log_label.place(x = 0, y = 200)
-
     
-
-def email_entry():
-    f.create_account()
-    acc_label = Label(root, text= "Account created successfully!")
-    acc_label.grid(x = 0, y = 540)
+def acc_entry():
+    f.create_account(firstname.get(),lastname.get(),birthdate.get(),address.get(),email_2.get(),password_2.get())
+    acc_label = Label(root, text= "Account created successfully! Now log in")
+    acc_label.place(x = 0, y = 540)
 
 
     
 
     
 login_button = Button(root, text ="Log into account", command= login_entry)
-email_button = Button(root, text = "Create an account")
+email_button = Button(root, text = "Create an account", command=acc_entry)
 
 
 
@@ -107,25 +114,53 @@ def check_balance_entry():
 
 def make_deposit_entry():
     f.make_deposit(id, int(deposit.get()))
+
+def make_withdrawal_entry():
+    failure_label = Label(root, text=("Insufficient funds, deposit more or withdraw less."))
+    success_label = Label(root, text=("Successful withdrawal!"), width=40)
+    w = f.make_withdrawal(id,int(withdrawal.get()))
+    if not w:
+        failure_label.place(x = 800, y = 330)
+        
+    else:
+        success_label.place(x = 800, y = 330)
     
+def update_entry():
+    f.update_acc(id, update.get(),update2.get())
+    update_label = Label(root, text=("Account has been successfully modified"))
+    update_label.place(x = 950, y = 400) 
+
+def delete_entry():
+    f.delete_acc(id)
+    delete_label = Label(root, text=("Your account has been deleted."))
+    delete_label.place(x = 600, y = 530)
 
 check_balance_button = Button(root, text="Check Balance", height=5, width= 20, command=check_balance_entry)
-check_balance_button.place(x = 400, y = 100)
+
 
 make_deposit_button = Button(root, text="Make deposit", height=5, width= 20, command=make_deposit_entry)
-make_deposit_button.place(x = 400, y = 200 )
+
 deposit = Entry(root, width = 20)
 deposit.insert(3,"Deposit amount: ")
-deposit.place(x = 600, y = 230)
 
-make_withdrawal_button = Button(root, text="Make withdrawal", height=5, width= 20)
-make_withdrawal_button.place(x = 400, y = 300 )
 
-update_button = Button(root, text="Modify account details", height=5, width= 20)
-update_button.place(x = 400, y = 400 )
+make_withdrawal_button = Button(root, text="Make withdrawal", height=5, width= 20, command=make_withdrawal_entry)
 
-delete_button = Button(root, text="Delete Account", height=5, width= 20)
-delete_button.place(x = 400, y = 500 )
+withdrawal = Entry(root, width = 20)
+withdrawal.insert(3,"Withdrawal amount: ")
+
+
+update_button = Button(root, text="Modify account details", height=5, width= 20, command=update_entry)
+
+update = Entry(root, width = 45)
+update.insert(3,"Enter account detail you would like to update: ")
+
+update2 = Entry(root, width = 25)
+update2.insert(3,"Enter desired change: ")
+
+
+delete_button = Button(root, text="Delete Account", height=5, width= 20, command=delete_entry)
+
     
     
 

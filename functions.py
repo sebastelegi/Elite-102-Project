@@ -19,7 +19,7 @@ def create_account(first_name,last_name,birth_date,address,email,password):
     cursor.execute(addData, values)
     connection.commit()
 
-    print("Your account has been created.")
+    return True
 
 def log_in(e,password):
 #This function prompts user to input an email in order to find a password from that email with a query
@@ -31,13 +31,17 @@ def log_in(e,password):
     query = ("SELECT password FROM user WHERE email = %s")
     
     #password = input("Enter your password: ")
-    print(email)
+    
 
     cursor.execute(query , email)
     check = cursor.fetchone()
     #if password isn't equal to the password in the query, return False.
-    print(password)
-    print(check[0])
+    
+    try:
+        #if printing check raises an exception, return false, this is for when email isn't in database
+        print(check[0])
+    except:
+        return False
 
     if password == check[0]:
         return True
@@ -90,38 +94,34 @@ def delete_acc(id):
     query = ("DELETE FROM user WHERE id = %s")
     
     cursor.execute(query,id)
+    connection.commit()
 
-def update_acc(id, choice):
+def update_acc(id, choice,change):
 #This uses a choice parameter to create a query based on the detail they choose to modify
     if choice == "email":
-        change = input("Enter new email: ")
         query = ("UPDATE user SET email = %s WHERE id = %s")
         values = (change, id[0])
         cursor.execute(query, values)
         connection.commit()
     elif choice == "password":
-        change = input("Enter new password: ")
         query = ("UPDATE user SET password = %s WHERE id = %s")
         values = (change, id[0])
         cursor.execute(query, values)
         connection.commit()
     elif choice == "first name":
-        change = input("Enter new name: ")
         query = ("UPDATE user SET firstname = %s WHERE id = %s")
         values = (change, id[0])
         cursor.execute(query, values)
         connection.commit()
     elif choice == "last name":
-        change = input("Enter new last name: ")
         query = ("UPDATE user SET lastname = %s WHERE id = %s")
         values = (change, id[0])
         cursor.execute(query, values)
         connection.commit()
     elif choice == "address":
-        change = input("Enter new address: ")
         query = ("UPDATE user SET address = %s WHERE id = %s")
         values = (change, id[0])
         cursor.execute(query, values)
         connection.commit()
     else:
-        print("Invalid choice")
+        return False
