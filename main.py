@@ -2,18 +2,6 @@
 import functions as f 
 from tkinter import *
 
-
-
-#f.create_account()
-#id = f.log_in(email, password)
-#print(id)
-#f.make_deposit(id)
-#print("Your balance is: $" + str(f.check_balance(id)))
-#amount = int(input("How much money would you like to withdraw?: $"))
-#f.make_withdrawal(id,amount)
-#choice = "password"
-#f.update_acc(id,choice)
-
 root = Tk()
 root.geometry("200x200")
 root.columnconfigure((0,1,2,3,4), weight=50)
