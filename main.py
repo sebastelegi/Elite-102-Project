@@ -97,7 +97,7 @@ email_button.place(x = 0, y = 260)
 
 def check_balance_entry():
     balance = f.check_balance(id)
-    balance_label = Label(root, text=("Your balance is: $" + str(balance)))
+    balance_label = Label(root, text=("Your balance is: $" + str(balance)), width = 60)
     balance_label.place(x = 600, y = 130)
 
 def make_deposit_entry():
